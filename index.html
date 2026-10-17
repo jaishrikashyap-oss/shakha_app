@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>शाखा ऐप (Shakha App)</title>
+    <style>
+        :root {
+            --bhagva: #FF9933;
+            --bhagva-dark: #E68A00;
+            --bg-color: #F9F9F9;
+            --card-bg: #FFFFFF;
+            --text-color: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--bhagva);
+            color: white;
+            text-align: center;
+            padding: 15px 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 5px 0 0 0;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        /* Login Screen Styles */
+        .login-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border-top: 6px solid var(--bhagva);
+            margin-top: 30px;
+        }
+
+        .login-card h2 {
+            margin-top: 0;
+            color: var(--bhagva-dark);
+            text-align: center;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .menu-btn {
+            background-color: var(--card-bg);
+            border: 2px solid var(--bhagva);
+            color: var(--bhagva-dark);
+            padding: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .menu-btn:hover, .menu-btn.active {
+            background-color: var(--bhagva);
+            color: white;
+        }
+
+        .section-panel {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            border-top: 5px solid var(--bhagva);
+        }
+
+        .section-panel.active {
+            display: block;
+        }
+
+        h3 {
+            margin-top: 0;
+            color: var(--bhagva-dark);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        input[type="number"], input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 14px;
+            min-width: 120px;
+        }
+
+        .btn-save { background-color: #28a745; }
+        .btn-save:hover { background-color: #218838; }
+
+        .btn-delete { background-color: #dc3545; }
+        .btn-delete:hover { background-color: #c82333; }
+
+        .btn-wa { background-color: #25D366; }
+        .btn-wa:hover { background-color: #1EBE5D; }
+
+        .btn-back {
+            background-color: #6c757d;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .btn-back:hover { background-color: #5a6268; }
+
+        .btn-switch {
+            background-color: var(--bhagva-dark);
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .content-display {
+            background: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .history-box {
+            margin-top: 20px;
+            background: #fff8f0;
+            border: 1px solid #ffd1a4;
+            border-radius: 6px;
+            padding: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            background: #ffffff;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            border-left: 4px solid var(--bhagva);
+            font-size: 13px;
+        }
+
+        .geet-list-btn {
+            width: 100%;
+            text-align: left;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            background: #fff3e6;
+            border: 1px solid var(--bhagva);
+            border-radius: 6px;
+            color: var(--bhagva-dark);
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .geet-list-btn:hover {
+            background: var(--bhagva);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🚩 शाखा ऐप (Shakha App) 🚩</h1>
+        <p id="shakhaHeaderInfo" style="display: none;"></p>
+    </header>
+
+    <div class="container">
+
+        <!-- 0. शाखा लॉगिन स्क्रीन -->
+        <div id="loginScreen" class="login-card">
+            <h2>शाखा चयन / विवरण दर्ज करें</h2>
+            <div class="form-group">
+                <label for="inputShakhaName">शाखा का नाम (Shakha Name):</label>
+                <input type="text" id="inputShakhaName" placeholder="उदा. सामान दादा शाखा">
+            </div>
+            <div class="form-group">
+                <label for="inputShakhaCode">शाखा कोड / स्थान (Shakha Code):</label>
+                <input type="text" id="inputShakhaCode" placeholder="उदा. 1 या पता">
+            </div>
+            <button class="action-btn btn-save" style="width: 100%; padding: 12px; font-size: 16px;" onclick="loginShakha()">शाखा में प्रवेश करें</button>
+        </div>
+
+        <!-- मुख्य मेनू डैशबोर्ड -->
+        <div id="dashboard" style="display: none;">
+            <div class="menu-grid" id="mainMenu">
+                <button class="menu-btn" onclick="openSection('upasthitiSection')">📊 उपस्थिति संख्या</button>
+                <button class="menu-btn" onclick="openSection('khelSection')">⚽ खेल संख्या</button>
+                <button class="menu-btn" onclick="openSection('prarthanaSection')">🙏 प्रार्थना</button>
+                <button class="menu-btn" onclick="openSection('geetSection')">🎶 गीत संग्रह</button>
+            </div>
+            <button class="action-btn btn-switch" onclick="logoutShakha()">🔄 दूसरी शाखा चुनें / कोड बदलें</button>
+        </div>
+
+        <!-- 1. उपस्थिति संख्या सेक्शन -->
+        <div id="upasthitiSection" class="section-panel">
+            <h3>उपस्थिति संख्या (Upasthiti Sankhya)</h3>
+            <div class="form-group">
+                <label for="upasthitiDate">दिनांक (Date):</label>
+                <input type="date" id="upasthitiDate">
+            </div>
+            <div class="form-group">
+                <label for="totalUpasthiti">कुल उपस्थिति संख्या (Total Sankhya):</label>
+                <input type="number" id="totalUpasthiti" placeholder="कुल संख्या दर्ज करें">
+            </div>
+            
+            <div class="btn-container">
+                <button class="action-btn btn-save" onclick="saveData('upasthiti')">सेव करें (Save)</button>
+                <button class="action-btn btn-wa" onclick="sendWhatsApp('upasthiti')">व्हाट्सएप (WhatsApp)</button>
+            </div>
+
+            <!-- इतिहास सेक्शन -->
+            <h4 style="margin: 15px 0 5px 0; color: var(--bhagva-dark);">पुराना इतिहास (History):</h4>
+            <div id="upasthitiHistory" class="history-box">
+                <p style="text-align: center; color: #777; margin: 10px 0;">कोई इतिहास उपलब्ध नहीं है।</p>
+            </div>
+            <button class="action-btn btn-delete" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 13px;" onclick="clearHistory('upasthiti')">इतिहास साफ़ करें (Delete History)</button>
+
+            <button class="action-btn btn-back" onclick="closeSections()">मुख्य मेनू पर वापस जाएं</button>
+        </div>
+
+        <!-- 2. खेल संख्या सेक्शन -->
+        <div id="khelSection" class="section-panel">
+            <h3>खेल संख्या (Khel Sankhya)</h3>
+            <div class="form-group">
+                <label for="khelDate">दिनांक (Date):</label>
+                <input type="date" id="khelDate">
+            </div>
+            <div class="form-group">
+                <label for="khelName">खेल का नाम (Khel Name):</label>
+                <input type="text" id="khelName" placeholder="खेल का नाम दर्ज करें">
+            </div>
+
+            <div class="btn-container">
+                <button class="action-btn btn-save" onclick="saveData('khel')">सेव करें (Save)</button>
+                <button class="action-btn btn-wa" onclick="sendWhatsApp('khel')">व्हाट्सएप (WhatsApp)</button>
+            </div>
+
+            <!-- इतिहास सेक्शन -->
+            <h4 style="margin: 15px 0 5px 0; color: var(--bhagva-dark);">पुराना इतिहास (History):</h4>
+            <div id="khelHistory" class="history-box">
+                <p style="text-align: center; color: #777; margin: 10px 0;">कोई इतिहास उपलब्ध नहीं है।</p>
+            </div>
+            <button class="action-btn btn-delete" style="width: 100%; margin-top: 8px; padding: 6px; font-size: 13px;" onclick="clearHistory('khel')">इतिहास साफ़ करें (Delete History)</button>
+
+            <button class="action-btn btn-back" onclick="closeSections()">मुख्य मेनू पर वापस जाएं</button>
+        </div>
+
+        <!-- 3. प्रार्थना सेक्शन -->
+        <div id="prarthanaSection" class="section-panel">
+            <h3>प्रार्थना (Prarthana)</h3>
+            <div class="content-display">
+नमस्ते सदा वत्सले मातृभूमे
+त्वया हिन्दुभूमे सुखं वर्धितोऽहम्।
+महामङ्गले पुण्यभूमे त्वदर्थे
+पतत्वेष कायो नमस्ते नमस्ते॥१॥
+
+प्रभो शक्तिमन् हिन्दुराष्ट्राङ्गभूता
+इमे सादरं त्वां नमामो वयम्
+त्वदीयाय कार्याय बद्धा कटीयम्
+शुभामाशिषं देहि तत्पूर्तये।
+अजय्यां च विश्वस्य देहीश शक्तिम्
+सुशीलं जगद्येन नम्रं भवेत्
+श्रुतं चैव यत्कण्टकाकीर्णमार्गम्
+स्वयं स्वीकृतं नः सुगंकारयेत्॥२॥
+
+समुत्कर्ष निःश्रेयसस्यैकमुग्रम्
+परं साधनं नाम वीरव्रतम्
+तदन्तः स्फुरत्वक्षया ध्येयनिष्ठा
+हृदन्तः प्रजागर्तु तीव्राऽनिशम्।
+विजेत्री च नः संहता कार्यशक्तिर्
+विधायास्य धर्मस्य संरक्षणम्
+परं वैभवं नेतुमेतत् स्वराष्ट्रम्
+समर्था भवत्वाशिषा ते भृशम्॥३॥
+
+॥भारत माता की जय॥
+            </div>
+            <button class="action-btn btn-back" onclick="closeSections()" style="margin-top: 15px;">मुख्य मेनू पर वापस जाएं</button>
+        </div>
+
+        <!-- 4. गीत संग्रह सेक्शन -->
+        <div id="geetSection" class="section-panel">
+            <h3>गीत संग्रह (Geet Sangrah)</h3>
+            
+            <div id="geetList">
+                <button class="geet-list-btn" onclick="showGeet('संगठन गढ़े चलो')">🎵 संगठन गढ़े चलो, सुपंथ पर बढ़े चलो</button>
+            </div>
+
+            <div id="geetDetail" style="display: none; margin-top: 15px;">
+                <h4 id="geetTitle" style="color: var(--bhagva-dark); margin-bottom: 8px;"></h4>
+                <div class="content-display" id="geetContent"></div>
+                <button class="action-btn btn-back" onclick="hideGeetDetail()" style="margin-top: 10px;">← गीत सूची पर वापस जाएं</button>
+            </div>
+
+            <button class="action-btn btn-back" onclick="closeSections()" style="margin-top: 15px;">मुख्य मेनू पर वापस जाएं</button>
+        </div>
+
+    </div>
+
+    <script>
+        let currentShakhaName = "";
+        let currentShakhaCode = "";
+
+        const geetData = {
+            "संगठन गढ़े चलो": `संगठन गढ़े चलो, सुपंथ पर बढ़े चलो।
+भला हो जिसमें देश का, वो काम सब किए चलो॥
+
+युग के साथ मिल के सब, कदम बढ़ाना सीख लो।
+एकता के स्वर में गीत, गुनगुनाना सीख लो।
+भूलकर भी मुख में, जाति-पंथ की न बात हो।
+भाषा, प्रांत के लिए, कभी न रक्तपात हो॥
+फूट का भरा घड़ा है, फोड़कर बढ़े चलो ॥`
+        };
+
+        window.onload = function() {
+            let savedName = localStorage.getItem('active_shakha_name');
+            let savedCode = localStorage.getItem('active_shakha_code');
+            if (savedName && savedCode) {
+                currentShakhaName = savedName;
+                currentShakhaCode = savedCode;
+                showDashboard();
+            }
+            let today = new Date().toISOString().split('T')[0];
+            let upasthitiDateInput = document.getElementById('upasthitiDate');
+            let khelDateInput = document.getElementById('khelDate');
+            if(upasthitiDateInput) upasthitiDateInput.value = today;
+            if(khelDateInput) khelDateInput.value = today;
+        };
+
+        function loginShakha() {
+            let nameInput = document.getElementById('inputShakhaName');
+            let codeInput = document.getElementById('inputShakhaCode');
+            
+            let name = nameInput ? nameInput.value.trim() : "";
+            let code = codeInput ? codeInput.value.trim() : "";
+
+            if (!name || !code) {
+                alert('कृपया शाखा का नाम और कोड/पता दोनों दर्ज करें!');
+                return;
+            }
+
+            currentShakhaName = name;
+            currentShakhaCode = code;
+
+            localStorage.setItem('active_shakha_name', name);
+            localStorage.setItem('active_shakha_code', code);
+
+            showDashboard();
+        }
+
+        function showDashboard() {
+            let loginScreen = document.getElementById('loginScreen');
+            let dashboard = document.getElementById('dashboard');
+            let headerInfo = document.getElementById('shakhaHeaderInfo');
+
+            if(loginScreen) loginScreen.style.display = 'none';
+            if(dashboard) dashboard.style.display = 'block';
+            
+            if(headerInfo) {
+                headerInfo.innerText = `शाखा: ${currentShakhaName} (कोड: ${currentShakhaCode})`;
+                headerInfo.style.display = 'block';
+            }
+        }
+
+        function logoutShakha() {
+            localStorage.removeItem('active_shakha_name');
+            localStorage.removeItem('active_shakha_code');
+            let loginScreen = document.getElementById('loginScreen');
+            let dashboard = document.getElementById('dashboard');
+            let headerInfo = document.getElementById('shakhaHeaderInfo');
+
+            if(loginScreen) loginScreen.style.display = 'block';
+            if(dashboard) dashboard.style.display = 'none';
+            if(headerInfo) headerInfo.style.display = 'none';
+            closeSections();
+        }
+
+        function openSection(sectionId) {
+            let mainMenu = document.getElementById('mainMenu');
+            if(mainMenu) mainMenu.style.display = 'none';
+            
+            let panels = document.querySelectorAll('.section-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            let targetSection = document.getElementById(sectionId);
+            if(targetSection) targetSection.classList.add('active');
+            
+            if (sectionId === 'upasthitiSection') {
+                loadSavedData('upasthiti');
+                renderHistory('upasthiti');
+            } else if (sectionId === 'khelSection') {
+                loadSavedData('khel');
+                renderHistory('khel');
+            }
+        }
+
+        function closeSections() {
+            let panels = document.querySelectorAll('.section-panel');
+            panels.forEach(panel => panel.classList.remove('active'));
+            
+            let mainMenu = document.getElementById('mainMenu');
+            if(mainMenu) mainMenu.style.display = 'grid';
+            
+            hideGeetDetail();
+        }
+
+        function showGeet(title) {
+            let geetList = document.getElementById('geetList');
+            let geetDetail = document.getElementById('geetDetail');
+            let geetTitle = document.getElementById('geetTitle');
+            let geetContent = document.getElementById('geetContent');
+
+            if(geetList) geetList.style.display = 'none';
+            if(geetDetail) geetDetail.style.display = 'block';
+            if(geetTitle) geetTitle.innerText = title;
+            if(geetContent) geetContent.innerText = geetData[title] || '';
+        }
+
+        function hideGeetDetail() {
+            let geetList = document.getElementById('geetList');
+            let geetDetail = document.getElementById('geetDetail');
+
+            if(geetDetail) geetDetail.style.display = 'none';
+            if(geetList) geetList.style.display = 'block';
+        }
+
+        function getStorageKey(type) {
+            return `shakha_${currentShakhaCode}_${type}`;
+        }
+
+        function getHistoryKey(type) {
+            return `shakha_${currentShakhaCode}_history_${type}`;
+        }
+
+        function saveData(type) {
+            let today = new Date().toISOString().split('T')[0];
+            if (type === 'upasthiti') {
+                let dateVal = document.getElementById('upasthitiDate').value || today;
+                let totalVal = document.getElementById('totalUpasthiti').value || '0';
+
+                let data = { date: dateVal, total: totalVal };
+                
+                localStorage.setItem(getStorageKey('upasthiti'), JSON.stringify(data));
+
+                let history = JSON.parse(localStorage.getItem(getHistoryKey('upasthiti'))) || [];
+                history.unshift(data);
+                localStorage.setItem(getHistoryKey('upasthiti'), JSON.stringify(history));
+
+                renderHistory('upasthiti');
+                alert(`[${currentShakhaName}] की उपस्थिति सफलतापूर्वक सेव हो गई है!`);
+            } else if (type === 'khel') {
+                let dateVal = document.getElementById('khelDate').value || today;
+                let nameVal = document.getElementById('khelName').value || 'उपलब्ध नहीं';
+
+                let data = { date: dateVal, name: nameVal };
+
+                localStorage.setItem(getStorageKey('khel'), JSON.stringify(data));
+
+                let history = JSON.parse(localStorage.getItem(getHistoryKey('khel'))) || [];
+                history.unshift(data);
+                localStorage.setItem(getHistoryKey('khel'), JSON.stringify(history));
+
+                renderHistory('khel');
+                alert(`[${currentShakhaName}] का खेल विवरण सफलतापूर्वक सेव हो गया है!`);
+            }
+        }
+
+        function loadSavedData(type) {
+            let today = new Date().toISOString().split('T')[0];
+            if (type === 'upasthiti') {
+                let saved = JSON.parse(localStorage.getItem(getStorageKey('upasthiti')));
+                let dateElem = document.getElementById('upasthitiDate');
+                let totalElem = document.getElementById('totalUpasthiti');
+                if(dateElem) dateElem.value = saved ? saved.date || today : today;
+                if(totalElem) totalElem.value = saved ? saved.total || '' : '';
+            } else if (type === 'khel') {
+                let saved = JSON.parse(localStorage.getItem(getStorageKey('khel')));
+                let dateElem = document.getElementById('khelDate');
+                let nameElem = document.getElementById('khelName');
+
+                if(dateElem) dateElem.value = saved ? saved.date || today : today;
+                if(nameElem) nameElem.value = saved ? saved.name || '' : '';
+            }
+        }
+
+        function renderHistory(type) {
+            let containerId = type === 'upasthiti' ? 'upasthitiHistory' : 'khelHistory';
+            let historyContainer = document.getElementById(containerId);
+            if(!historyContainer) return;
+
+            let history = JSON.parse(localStorage.getItem(getHistoryKey(type))) || [];
+
+            if (history.length === 0) {
+                historyContainer.innerHTML = `<p style="text-align: center; color: #777; margin: 10px 0;">कोई इतिहास उपलब्ध नहीं है।</p>`;
+                return;
+            }
+
+            let html = "";
+            history.forEach((item) => {
+                if (type === 'upasthiti') {
+                    html += `<div class="history-item"><b>दिनांक:</b> ${item.date} | <b>कुल संख्या:</b> ${item.total}</div>`;
+                } else {
+                    html += `<div class="history-item"><b>दिनांक:</b> ${item.date} | <b>खेल का नाम:</b> ${item.name}</div>`;
+                }
+            });
+            historyContainer.innerHTML = html;
+        }
+
+        function clearHistory(type) {
+            if (confirm(`क्या आप वाकई ${currentShakhaName} का सारा इतिहास हटाना चाहते हैं?`)) {
+                localStorage.removeItem(getHistoryKey(type));
+                renderHistory(type);
+                alert('इतिहास साफ़ कर दिया गया है!');
+            }
+        }
+
+        function sendWhatsApp(type) {
+            let message = "";
+            if (type === 'upasthiti') {
+                let date = document.getElementById('upasthitiDate').value || 'N/A';
+                let total = document.getElementById('totalUpasthiti').value || '0';
+
+                message = `*🚩 शाखा उपस्थिति (Shakha Upasthiti)*\n` +
+                          `• शाखा: ${currentShakhaName} (कोड: ${currentShakhaCode})\n` +
+                          `• दिनांक: ${date}\n` +
+                          `------------------\n` +
+                          `*कुल उपस्थिति संख्या: ${total}*`;
+            } else if (type === 'khel') {
+                let date = document.getElementById('khelDate').value || 'N/A';
+                let name = document.getElementById('khelName').value || 'उपलब्ध नहीं';
+
+                message = `*🚩 शाखा खेल विवरण (Shakha Khel)*\n` +
+                          `• शाखा: ${currentShakhaName} (कोड: ${currentShakhaCode})\n` +
+                          `• दिनांक: ${date}\n` +
+                          `------------------\n` +
+                          `• खेल का नाम: ${name}`;
+            }
+
+            let encodedMessage = encodeURIComponent(message);
+            window.open(`https://api.whatsapp.com/send?text=${encodedMessage}`, '_blank');
+        }
+    </script>
+</body>
+</html>
